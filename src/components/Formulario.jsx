@@ -1,0 +1,113 @@
+import {useState, useEffect} from "react";
+import Error from  "./Error"
+const Formulario = ({pacientes, setPacientes}) => {
+    const [nombreMascota, setNombreMascota] = useState("")
+    const [nombrePropietario, setNombrePropietario] = useState("")
+    const [email, setEmail] = useState("")
+    const [fecha, setFecha] = useState("")
+    const [sintomas, setSintomas] = useState("")
+
+    const [error, setError] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        //Validación formulario
+        if ([nombreMascota, nombrePropietario, email, fecha, sintomas].includes("")) {
+            console.log("Hay al menos un campo vacío")
+            setError(true)
+            return;
+        }
+
+        setError(false)
+
+        const objetoPaciente = {
+            nombreMascota,
+            nombrePropietario,
+            email,
+            fecha,
+            sintomas
+        }
+
+        setPacientes([...pacientes, objetoPaciente])
+    }
+
+    return (
+        <div className={"md:w-1/2 lg:w-2/5"}>
+            <h2 className={"font-black text-3xl text-center"}>Seguimiento pacientes</h2>
+            <p className={"text-lg mt-5 text-center mb-10"}>
+                Añade pacientes y
+                <span className={"font-bold text-indigo-600"}>Administralos</span>
+            </p>
+            <form
+                action=""
+                className={"bg-white shadow-md rounded-lg p-10 mb-10"}
+                onSubmit={handleSubmit}
+            >
+                {error && <Error mensaje={"Todos los campos son obligatorios"}/>}
+                <div className={"mb-5"}>
+                    <label htmlFor="nombreMascota" className={"font-bold block text-gray-700"}>NOMBRE MASCOTA</label>
+                    <input
+                        type="text"
+                        className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
+                        placeholder={"Nombre de la mascota"}
+                        name={"nombreMascota"}
+                        id={"nombreMascota"}
+                        value={nombreMascota}
+                        onChange={ (e) => setNombreMascota(e.target.value)}
+                    />
+                </div>
+                <div className={"mb-5"}>
+                    <label htmlFor="nombrePropietario" className={"font-bold block text-gray-700"}>NOMBRE PROPIETARIO</label>
+                    <input
+                        type="text"
+                        className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
+                        placeholder={"Nombre del propietario"}
+                        name={"nombrePropietario"}
+                        id={"nombrePropietario"}
+                        value={nombrePropietario}
+                        onChange={ (e) => setNombrePropietario(e.target.value)}
+                    />
+                </div>
+                <div className={"mb-5"}>
+                    <label htmlFor="email" className={"font-bold block text-gray-700"}>EMAIL</label>
+                    <input
+                        type="email"
+                        className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
+                        placeholder={"Email contacto propietario"}
+                        name={"email"}
+                        id={"email"}
+                        value={email}
+                        onChange={ (e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className={"mb-5"}>
+                    <label htmlFor="alta" className={"font-bold block text-gray-700"}>ALTA</label>
+                    <input
+                        type="date"
+                        className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
+                        name={"alta"}
+                        id={"alta"}
+                        value={fecha}
+                        onChange={ (e) => setFecha(e.target.value)}
+                    />
+                </div>
+                <div className={"mb-5"}>
+                    <label htmlFor="sintomas" className={"font-bold block text-gray-700"}>SÍNTOMAS</label>
+                    <textarea
+                        name="sintomas"
+                        id="sintomas"
+                        rows="4"
+                        className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
+                        placeholder={"Describe los síntomas"}
+                        value={sintomas}
+                        onChange={ (e) => setSintomas(e.target.value)}
+                    />
+                </div>
+                <button className={"w-full rounded-md bg-indigo-600 text-white font-bold p-3 hover:bg-indigo-700 cursor-pointer transition-all"} type={"submit"}>AGREGAR PACIENTE</button>
+            </form>
+        </div>
+    )
+}
+
+export default Formulario
