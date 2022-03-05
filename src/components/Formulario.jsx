@@ -4,18 +4,16 @@ import Error from  "./Error"
 const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
     const [nombreMascota, setNombreMascota] = useState("")
     const [nombrePropietario, setNombrePropietario] = useState("")
-    const [email, setEmail] = useState("")
+    const [mail, setEmail] = useState("")
     const [fecha, setFecha] = useState("")
     const [sintomas, setSintomas] = useState("")
 
     useEffect( () => {
-        if (Object.keys(paciente) > 0) {
             setNombreMascota(paciente.nombreMascota)
             setNombrePropietario(paciente.nombreMascota)
-            setEmail(paciente.email)
+            setEmail(paciente.mail)
             setFecha(paciente.fecha)
             setSintomas(paciente.sintomas)
-        }
     }, [paciente])
 
     const [error, setError] = useState(false);
@@ -31,7 +29,7 @@ const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
         e.preventDefault()
 
         //Validación formulario
-        if ([nombreMascota, nombrePropietario, email, fecha, sintomas].includes("")) {
+        if ([nombreMascota, nombrePropietario, mail, fecha, sintomas].includes("")) {
             console.log("Hay al menos un campo vacío")
             setError(true)
             return;
@@ -42,19 +40,16 @@ const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
         const objetoPaciente = {
             nombreMascota,
             nombrePropietario,
-            email,
+            mail,
             fecha,
             sintomas,
         }
 
         if (paciente.id) {
-
             objetoPaciente.id = paciente.id
             const pacientesActualizados = pacientes.map( pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState)
             setPacientes(pacientesActualizados)
             setPaciente({})
-            setPaciente({})
-
         } else {
             objetoPaciente.id = generarId()
             setPacientes([...pacientes, objetoPaciente])
@@ -66,6 +61,7 @@ const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
         setEmail("")
         setFecha("")
         setSintomas("")
+
 
     }
 
@@ -107,14 +103,14 @@ const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
                     />
                 </div>
                 <div className={"mb-5"}>
-                    <label htmlFor="email" className={"font-bold block text-gray-700"}>EMAIL</label>
+                    <label htmlFor="mail" className={"font-bold block text-gray-700"}>EMAIL</label>
                     <input
-                        type="email"
+                        type="mail"
                         className={"border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"}
                         placeholder={"Email contacto propietario"}
-                        name={"email"}
-                        id={"email"}
-                        value={email}
+                        name={"mail"}
+                        id={"mail"}
+                        value={mail}
                         onChange={ (e) => setEmail(e.target.value)}
                     />
                 </div>
@@ -141,10 +137,11 @@ const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
                         onChange={ (e) => setSintomas(e.target.value)}
                     />
                 </div>
-                <button
+                <input
                     className={"w-full rounded-md bg-indigo-600 text-white font-bold p-3 hover:bg-indigo-700 cursor-pointer transition-all"}
                     type={"submit"}
-                >{ paciente.id ? "EDITAR PACIENTE" : "AGREGAR PACIENTE" }</button>
+                    value={ paciente.id ? "EDITAR PACIENTE" : "AGREGAR PACIENTE" }
+                />
             </form>
         </div>
     )

@@ -11,7 +11,6 @@ function App() {
     const eliminarPaciente = (id) => {
         const pacientesActualizados = pacientes.filter( paciente => paciente.id !== id)
         setPacientes(pacientesActualizados)
-
     }
 
   return (
@@ -22,7 +21,7 @@ function App() {
                 pacientes={pacientes}
                 setPacientes={setPacientes}
                 paciente={paciente}
-                setPaciente={setPaciente()}
+                setPaciente={setPaciente}
             />
             <ListadoPacientes
                 pacientes={pacientes}
