@@ -1,13 +1,31 @@
 import {useState, useEffect} from "react";
 import Error from  "./Error"
-const Formulario = ({pacientes, setPacientes}) => {
+
+const Formulario = ({pacientes, setPacientes, paciente, setPaciente}) => {
     const [nombreMascota, setNombreMascota] = useState("")
     const [nombrePropietario, setNombrePropietario] = useState("")
     const [email, setEmail] = useState("")
     const [fecha, setFecha] = useState("")
     const [sintomas, setSintomas] = useState("")
 
+    useEffect( () => {
+        if (Object.keys(paciente) > 0) {
+            setNombreMascota(paciente.nombreMascota)
+            setNombrePropietario(paciente.nombreMascota)
+            setEmail(paciente.email)
+            setFecha(paciente.fecha)
+            setSintomas(paciente.sintomas)
+        }
+    }, [paciente])
+
     const [error, setError] = useState(false);
+
+    const generarId = () => {
+        const random = Math.random().toString(36).substr(2)
+        const fecha = Date.now().toString(36)
+
+        return random + fecha
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -26,10 +44,29 @@ const Formulario = ({pacientes, setPacientes}) => {
             nombrePropietario,
             email,
             fecha,
-            sintomas
+            sintomas,
         }
 
-        setPacientes([...pacientes, objetoPaciente])
+        if (paciente.id) {
+
+            objetoPaciente.id = paciente.id
+            const pacientesActualizados = pacientes.map( pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState)
+            setPacientes(pacientesActualizados)
+            setPaciente({})
+            setPaciente({})
+
+        } else {
+            objetoPaciente.id = generarId()
+            setPacientes([...pacientes, objetoPaciente])
+        }
+
+        //REINICIAR FORM
+        setNombreMascota("")
+        setNombrePropietario("")
+        setEmail("")
+        setFecha("")
+        setSintomas("")
+
     }
 
     return (
@@ -104,7 +141,10 @@ const Formulario = ({pacientes, setPacientes}) => {
                         onChange={ (e) => setSintomas(e.target.value)}
                     />
                 </div>
-                <button className={"w-full rounded-md bg-indigo-600 text-white font-bold p-3 hover:bg-indigo-700 cursor-pointer transition-all"} type={"submit"}>AGREGAR PACIENTE</button>
+                <button
+                    className={"w-full rounded-md bg-indigo-600 text-white font-bold p-3 hover:bg-indigo-700 cursor-pointer transition-all"}
+                    type={"submit"}
+                >{ paciente.id ? "EDITAR PACIENTE" : "AGREGAR PACIENTE" }</button>
             </form>
         </div>
     )
